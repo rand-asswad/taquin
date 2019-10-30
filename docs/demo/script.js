@@ -1,22 +1,11 @@
 var tau = {session: pl.create()};
 
-var src_path = "../src/";
-handleFile(src_path + "8puzzle.pl");
+handleFile("main.pl");
 
 // upload file source
 function handleFile(fileName) {
-    var match;
     fetch(fileName).then(response => response.text()).then(text => {
-        tau.code = ":- use_module(library(lists)).\n" + text;
-        var regex = /:-\s*consult\((?:'|")(\S+)(?:'|")\)\./;
-        match = tau.code.match(regex);
-        var src = "";
-        if (match.length > 1) src = src_path + match[1];
-        return fetch(src);
-    }).then(response => response.text()).then(text => {
-        tau.code = tau.code.replace(match[0], text);
-        tau.session.consult(tau.code);
-    }).catch(error => {
+        tau.code = text;
         tau.session.consult(tau.code);
     });
 }
