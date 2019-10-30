@@ -1,6 +1,6 @@
 var tau = {session: pl.create()};
 
-var src_path = "../../src/";
+var src_path = "../src/";
 handleFile(src_path + "8puzzle.pl");
 
 // upload file source
