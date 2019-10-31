@@ -1,0 +1,17 @@
+---
+title: "Le Jeu du Taquin"
+lang: fr-FR
+---
+```{r setup, include=FALSE}
+library(knitr)
+
+# set directory
+proj <- normalizePath('..')
+opts_knit$set(root.dir = proj)
+
+# set chunk options
+opts_chunk$set(fig.pos = 'H')
+opts_chunk$set(comment = NA)
+```
+
+\pagebreak
