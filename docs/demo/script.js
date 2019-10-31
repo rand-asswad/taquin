@@ -21,6 +21,7 @@ var path;
 var step;
 newPuzzle.addEventListener("click", e => {
     let puzzle = [1,2,3, 4,5,0, 7,8,6]; //testing..should be random
+    //let puzzle = randomPuzzle();
     path = getPath(puzzle);
     grid.data = puzzle;
     moveBtn.removeAttribute("style");
@@ -29,6 +30,14 @@ newPuzzle.addEventListener("click", e => {
     backBtn.setAttribute("disabled", "");
     step = 0;
 });
+
+function randomPuzzle() {
+    var query = 'goal(P).';
+    tau.session.query(query);
+    var goal;
+    tau.session.answer(x => path = x.links.P.toJavaScript());
+    return shuffle(goal);
+}
 
 function getPath(puzzle) {
     var varName = 'P';
@@ -78,4 +87,23 @@ function back(direction) {
     var state;
     tau.session.answer(x => state = x.links[varName].toJavaScript());
     return state;
+}
+
+function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
 }
