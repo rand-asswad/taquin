@@ -26,3 +26,22 @@ naive_solve(Initial, [Direction|Path], Visited) :-
       move(Initial, State, Direction),
       \+member(State, Visited), % State is not a member of Visited
       naive_solve(State, Path, [State|Visited]). % finds path from new state
+
+/* manhattan(State1, State2, Dist)
+ * the manhattan distance between two states
+ */
+:- consult('manhattan.pl').
+manhattan(State, Dist) :- goal(Goal), manhattan(State, Goal, Dist).
+
+/* hamming(State1, State2, Dist)
+ * the hamming distance between two states
+ */
+:- consult('hamming.pl').
+hamming(State, Dist) :- goal(Goal), hamming(State, Goal, Dist).
+
+/* heuristic function */
+h(State, H) :- manhattan(State, Manh), hamming(State, Ham), H is Manh + 3 * Ham.
+
+/* smart_move(Initial, State)
+ * choose State that minimises heuristic function
+ */
