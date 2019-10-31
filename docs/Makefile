@@ -1,3 +1,8 @@
+demo: ../src/8puzzle.pl
+	@echo "consulting prolog files..."
+	python3 demo/preprocess.py $<
+	@echo "done!"
+
 all: main.rmd
 	@echo "rendering all..."
 	Rscript -e "bookdown::render_book('$<', c('bookdown::pdf_book', 'bookdown::html_document2'))"
