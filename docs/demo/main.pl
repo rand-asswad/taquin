@@ -1,5 +1,11 @@
+
+% import lists since tau-prolog is stupid
 :- use_module(library(lists)).
 
+% define dif/2
+dif(X, Y) :- nonvar(X), nonvar(Y), X \== Y.
+
+% program starts here
 /* goal(L) : the winning state */
 goal([1,2,3,
       4,5,6,
@@ -116,17 +122,51 @@ manhattan(State, Dist) :- goal(Goal), manhattan(State, Goal, Dist).
  * the hamming distance between two states
  */
 /* the Hamming function
- * number of tiles in different positions
+ * number of tiles in wrong positions
  */
 
 hamming([], [], 0).
 hamming([H|T1], [H|T2], N) :- hamming(T1, T2, N).
-hamming([_|T1], [_|T2], N) :- hamming(T1, T2, M), N is M + 1.
+hamming([A|T1], [B|T2], N) :- dif(A, B), hamming(T1, T2, M), N is M + 1.
 hamming(State, Dist) :- goal(Goal), hamming(State, Goal, Dist).
 
 /* heuristic function */
-h(State, H) :- manhattan(State, Manh), hamming(State, Ham), H is Manh + 3 * Ham.
+%h(State, H) :- manhattan(State, Manh), hamming(State, Ham), H is Manh + 3 * Ham.
+h(State, H) :- hamming(State, H).
 
 /* smart_move(Initial, State)
  * choose State that minimises heuristic function
  */
+
+neighborCost(State1, State2, Cost) :- move(State1, State2, _), h(State2, Cost).
+
+neighborStates(State, Neighbors) :- findall(After, move(State, After, _), Neighbors).
+
+%cheapest(List, State)
+cheapest([State], State).
+cheapest([A, B|T], M) :- h(A, Ac), h(B, Bc), Ac =< Bc, cheapest([A|T], M).
+cheapest([A, B|T], M) :- h(A, Ac), h(B, Bc), Ac > Bc, cheapest([B|T], M).
+
+%bestNeighbor(State, Neighbor)
+bestNeighbor(State, Neighbor) :- neighborStates(State, List), cheapest(List, Neighbor).
+
+%bestMove(State, Neighbor, Visited)
+bestMove(State, Next, Visited) :-
+      findall(Neighbor, (move(State, Neighbor, _), \+member(Neighbor, Visited)), Neighbors),
+      cheapest(Neighbors, Next).
+
+% stores path
+solve(Initial, Path) :- solve(Initial, [], [], Path).
+solve(Initial, _, States, States) :- goal(Initial).
+solve(Initial, Visited, P, Path) :-
+      bestMove(Initial, State, Visited),
+      move(Initial, State, Direction),
+      append(P, [Direction], PD),
+      solve(State, [State|Visited], PD, Path).
+
+% stores states
+%solve(Initial, Path) :- solve(Initial, [], Path).
+%solve(Initial, Path, Path) :- goal(Initial).
+%solve(Initial, Visited, Path) :-
+%      bestMove(Initial, State, Visited),
+%      solve(State, [State|Visited], Path).

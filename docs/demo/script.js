@@ -20,7 +20,7 @@ var grid = new Grid('grid');
 var path;
 var step;
 newPuzzle.addEventListener("click", e => {
-    let puzzle = [1,2,3, 4,5,0, 7,8,6]; //testing..should be random
+    let puzzle = [0,1,3, 4,2,5, 7,8,6]; //testing..should be random
     //let puzzle = randomPuzzle();
     path = getPath(puzzle);
     grid.data = puzzle;
@@ -41,7 +41,7 @@ function randomPuzzle() {
 
 function getPath(puzzle) {
     var varName = 'P';
-    var query = 'naive_solve([' + puzzle.join(', ') + '], ' + varName + ').';
+    var query = 'solve([' + puzzle.join(', ') + '], ' + varName + ').';
     tau.session.query(query);
     var path;
     tau.session.answer(x => path = x.links[varName].toJavaScript());
