@@ -1,4 +1,4 @@
-var tau = {session: pl.create()};
+var tau = {session: pl.create(1000000)}; // default 1000
 
 handleFile("main.pl");
 

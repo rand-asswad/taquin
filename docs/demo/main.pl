@@ -74,13 +74,14 @@ move(Before, After, down) :- down(Before, After).
  * however this can loop a lot in order to find a path
  * 'naive' is in the name!
  */
-naive_solve(Initial, Path) :- naive_solve(Initial, Path, []).
+naive_solve(Initial, Path) :- naive_solve(Initial, [], [], Path).
 
-naive_solve(Initial, [], _) :- goal(Initial).
-naive_solve(Initial, [Direction|Path], Visited) :-
+naive_solve(Initial, _, Path, Path) :- goal(Initial).
+naive_solve(Initial, Visited, P, Path) :-
       move(Initial, State, Direction),
       \+member(State, Visited), % State is not a member of Visited
-      naive_solve(State, Path, [State|Visited]). % finds path from new state
+      append(P, [Direction], PD),
+      naive_solve(State, [State|Visited], PD, Path). % finds path from new state
 
 /* manhattan(State1, State2, Dist)
  * the manhattan distance between two states
@@ -93,30 +94,43 @@ naive_solve(Initial, [Direction|Path], Visited) :-
 
 % manhattan distance between two indices
 manh(Ind1, Ind2, D) :-
-      arrayInd(Ind1, X1, Y1), arrayInd(Ind2, X2, Y2),
-      diff(X1, X2, Dx), diff(Y1, Y2, Dy),
-      D is Dx + Dy.
+      arrayInd(Ind1, X1, Y1), arrayInd(Ind2, X2, Y2), % switch to coordinates
+      diff(X1, X2, Dx), diff(Y1, Y2, Dy), % calculate coordinates difference
+      D is Dx + Dy. % add differences
+
 % return X and Y of a given 1D index (or vice versa)
-arrayInd(Ind, X, Y) :- X is mod(Ind, 3), Y is div(Ind, 3).
+arrayInd(Ind, X, Y) :- X is mod(Ind, 3), Y is Ind // 3.
+
 % absolute difference of two numbers
 diff(A, B, Diff) :- D is A - B, Diff is abs(D).
 
 % pos(E, L, Ind)
-% position (index) Ind of an element E in a list L
+% position (index) Ind of first occurence of an element E in a list L
 pos(E, [E|_], 0).
 pos(E, [_|T], Ind) :- pos(E, T, I), Ind is I + 1.
 
 % manhattan distance of the element at position Ind in L1 from L2
-distInd(Ind, L1, L2, D) :- pos(E, L1, Ind), pos(E, L2, Ind2), manh(Ind, Ind2, D).
+distInd(Ind, L1, _, 0) :- pos(0, L1, Ind). % exclude zero
+distInd(Ind, L1, L2, D) :-
+      pos(E, L1, Ind), % fetch element at Ind from L1
+      pos(E, L2, Ind2), % find its index in L2
+      manh(Ind, Ind2, D). % calculate distance between the indices
 
 % cumulative manhattan distance of elements up to Ind
 distCumul(0, L1, L2, D) :- distInd(0, L1, L2, D).
-distCumul(Ind, L1, L2, D) :- distCumul(Prev, L1, L2, Dc), distInd(Ind, L1, L2, Di), Ind is Prev + 1, D is Di + Dc.
+distCumul(Ind, L1, L2, D) :-
+      distCumul(Prev, L1, L2, Dc), % cumul dist up to previous index
+      distInd(Ind, L1, L2, Di), % distance of current index
+      Ind is Prev + 1, % define previous
+      D is Di + Dc. % add distances
 
 % manhattan distance between two lists
-manhattan(L1, L2, D) :- distCumul(N, L1, L2, D), length(L1, M), M is N + 1.
+manhattan(L1, L2, D) :-
+      distCumul(N, L1, L2, D), % calculate cumul distance up to length(L1)
+      length(L1, M), % get length(L1)
+      M is N + 1. % exclude last index since we start from 0
 
-manhattan(State, Dist) :- goal(Goal), manhattan(State, Goal, Dist).
+manhattan(State, Dist) :- goal(Goal), manhattan(State, Goal, Dist), !.
 
 /* hamming(State1, State2, Dist)
  * the hamming distance between two states
@@ -127,12 +141,17 @@ manhattan(State, Dist) :- goal(Goal), manhattan(State, Goal, Dist).
 
 hamming([], [], 0).
 hamming([H|T1], [H|T2], N) :- hamming(T1, T2, N).
+hamming([0|T1], [_|T2], N) :- hamming(T1, T2, N). % exclude zero
 hamming([A|T1], [B|T2], N) :- dif(A, B), hamming(T1, T2, M), N is M + 1.
-hamming(State, Dist) :- goal(Goal), hamming(State, Goal, Dist).
+hamming(State, Dist) :- goal(Goal), hamming(State, Goal, Dist), !.
 
-/* heuristic function */
-%h(State, H) :- manhattan(State, Manh), hamming(State, Ham), H is Manh + 3 * Ham.
-h(State, H) :- hamming(State, H).
+/* heuristic functions */
+h(State, H, manhattan) :- manhattan(State, H).
+h(State, H, hamming) :- hamming(State, H).
+h(State, H, nilsson) :- manhattan(State, Manh), hamming(State, Ham), H is Manh + 3 * Ham.
+
+% choose default.
+h(State, H) :- h(State, H, hamming).
 
 /* smart_move(Initial, State)
  * choose State that minimises heuristic function
@@ -156,7 +175,7 @@ bestMove(State, Next, Visited) :-
       cheapest(Neighbors, Next).
 
 % stores path
-solve(Initial, Path) :- solve(Initial, [], [], Path).
+solve(Initial, Path) :- solve(Initial, [], [], Path), !.
 solve(Initial, _, States, States) :- goal(Initial).
 solve(Initial, Visited, P, Path) :-
       bestMove(Initial, State, Visited),
