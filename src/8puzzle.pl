@@ -19,29 +19,34 @@ goal([1,2,3,
  * however this can loop a lot in order to find a path
  * 'naive' is in the name!
  */
-naive_solve(Initial, Path) :- naive_solve(Initial, Path, []).
+naive_solve(Initial, Path) :- naive_solve(Initial, [], [], Path).
 
-naive_solve(Initial, [], _) :- goal(Initial).
-naive_solve(Initial, [Direction|Path], Visited) :-
+naive_solve(Initial, _, Path, Path) :- goal(Initial).
+naive_solve(Initial, Visited, P, Path) :-
       move(Initial, State, Direction),
       \+member(State, Visited), % State is not a member of Visited
-      naive_solve(State, Path, [State|Visited]). % finds path from new state
+      append(P, [Direction], PD),
+      naive_solve(State, [State|Visited], PD, Path). % finds path from new state
 
 /* manhattan(State1, State2, Dist)
  * the manhattan distance between two states
  */
 :- consult('manhattan.pl').
-manhattan(State, Dist) :- goal(Goal), manhattan(State, Goal, Dist).
+manhattan(State, Dist) :- goal(Goal), manhattan(State, Goal, Dist), !.
 
 /* hamming(State1, State2, Dist)
  * the hamming distance between two states
  */
 :- consult('hamming.pl').
-hamming(State, Dist) :- goal(Goal), hamming(State, Goal, Dist).
+hamming(State, Dist) :- goal(Goal), hamming(State, Goal, Dist), !.
 
-/* heuristic function */
-%h(State, H) :- manhattan(State, Manh), hamming(State, Ham), H is Manh + 3 * Ham.
-h(State, H) :- hamming(State, H).
+/* heuristic functions */
+h(State, H, manhattan) :- manhattan(State, H).
+h(State, H, hamming) :- hamming(State, H).
+h(State, H, nilsson) :- manhattan(State, Manh), hamming(State, Ham), H is Manh + 3 * Ham.
+
+% choose default.
+h(State, H) :- h(State, H, nilsson).
 
 /* smart_move(Initial, State)
  * choose State that minimises heuristic function
@@ -65,7 +70,7 @@ bestMove(State, Next, Visited) :-
       cheapest(Neighbors, Next).
 
 % stores path
-solve(Initial, Path) :- solve(Initial, [], [], Path).
+solve(Initial, Path) :- solve(Initial, [], [], Path), !.
 solve(Initial, _, States, States) :- goal(Initial).
 solve(Initial, Visited, P, Path) :-
       bestMove(Initial, State, Visited),
