@@ -151,7 +151,7 @@ h(State, H, hamming) :- hamming(State, H).
 h(State, H, nilsson) :- manhattan(State, Manh), hamming(State, Ham), H is Manh + 3 * Ham.
 
 % choose default.
-h(State, H) :- h(State, H, hamming).
+h(State, H) :- h(State, H, nilsson).
 
 /* smart_move(Initial, State)
  * choose State that minimises heuristic function

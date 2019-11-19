@@ -44,5 +44,5 @@ if __name__ == '__main__':
     if len(argv) > 1:
         src = argv[1]
     else:
-        src = '../../src/8puzzle.pl'
+        src = '../../8puzzle.pl'
     process(src, TAU_PREFIX, post_process)

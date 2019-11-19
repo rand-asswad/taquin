@@ -1,4 +1,4 @@
-demo: ../src/8puzzle.pl
+demo: ../8puzzle.pl
 	@echo "consulting prolog files..."
 	python3 demo/preprocess.py $<
 	@echo "done!"
