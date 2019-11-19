@@ -1622,13 +1622,26 @@ div.tocify {
 <div id="implementation" class="section level1">
 <h1>Implémentation</h1>
 <p>Explication de notre code.</p>
-<p><a href="https://rand-asswad.github.io/taquin/demo/">Voir la démo</a></p>
 <pre class="sh"><code>swipl -q -s test.pl</code></pre>
-<pre><code>[0,1,3,4,2,5,7,8,6]
-[left,up,left,up]
-
-[8,1,3,4,0,2,7,6,5]
-[left,up,right,down,left,up,right,right,down,down,left,left,up,up,right,right,down,left,left,down,right,up,right,up,left,left,down,right,right,up,left,down,left,up]</code></pre>
+<pre><code>0  1  3
+4  2  5
+7  8  6
+left
+1  0  3
+4  2  5
+7  8  6
+up
+1  2  3
+4  0  5
+7  8  6
+left
+1  2  3
+4  5  0
+7  8  6
+up
+1  2  3
+4  5  6
+7  8  0</code></pre>
 <!--chapter:end:parts/3_implementation.md-->
 </div>
 <div id="conclusion" class="section level1">
