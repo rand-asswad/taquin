@@ -5,7 +5,7 @@ bookdown::pdf_book:
   fig_height: 2
   includes:
     in_header: include/preambule.tex
-    before_body: parts/cover.tex
+    before_body: parts/0_cover.tex
 bookdown::html_document2:
   toc: true
   toc_float: true
@@ -15,5 +15,3 @@ bookdown::html_document2:
   css: include/styles.css
   includes:
     in_header: include/header.html
-bookdown::gitbook:
-  fig_caption: true
