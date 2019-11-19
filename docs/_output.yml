@@ -15,3 +15,23 @@ bookdown::html_document2:
   css: include/styles.css
   includes:
     in_header: include/header.html
+beamer_presentation:
+  keep_tex: false
+  slide_level: 1
+  theme: Warsaw
+  includes:
+    in_header: include/mybeamer.tex
+revealjs::revealjs_presentation:
+  theme: simple
+  highlight: haddock
+  center: true
+  transition: slide
+  incremental: true
+  css: include/reveal.css
+  self_contained: true
+  reveal_options:
+    history: false
+    slideNumber: true
+  includes:
+    after_body: include/slides_title.html
+  pandoc_args: ["--standalone"]

@@ -9,7 +9,7 @@ goal([1,2,3,
  * from the Before state
  * in the direction D
  */
-:- consult('moves.pl').
+:- consult('util/moves.pl').
 
 
 /* naive_solve(InitialPuzzle, Path) :
@@ -31,13 +31,13 @@ naive_solve(Initial, Visited, P, Path) :-
 /* manhattan(State1, State2, Dist)
  * the manhattan distance between two states
  */
-:- consult('manhattan.pl').
+:- consult('util/manhattan.pl').
 manhattan(State, Dist) :- goal(Goal), manhattan(State, Goal, Dist), !.
 
 /* hamming(State1, State2, Dist)
  * the hamming distance between two states
  */
-:- consult('hamming.pl').
+:- consult('util/hamming.pl').
 hamming(State, Dist) :- goal(Goal), hamming(State, Goal, Dist), !.
 
 /* heuristic functions */
