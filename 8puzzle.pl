@@ -21,7 +21,7 @@ goal([1,2,3,
  */
 naive_solve(Initial, Path) :- naive_solve(Initial, [], [], Path).
 
-naive_solve(Initial, _, Path, Path) :- goal(Initial).
+naive_solve(Initial, _, Path, Path) :- goal(Initial), !.
 naive_solve(Initial, Visited, P, Path) :-
       move(Initial, State, Direction),
       \+member(State, Visited), % State is not a member of Visited
@@ -48,13 +48,7 @@ h(State, H, nilsson) :- manhattan(State, Manh), hamming(State, Ham), H is Manh +
 % choose default.
 h(State, H) :- h(State, H, nilsson).
 
-/* smart_move(Initial, State)
- * choose State that minimises heuristic function
- */
-
-neighborCost(State1, State2, Cost) :- move(State1, State2, _), h(State2, Cost).
-
-neighborStates(State, Neighbors) :- findall(After, move(State, After, _), Neighbors).
+neighborCost(State1, State2, F) :- move(State1, State2, _), h(State2, H), F is H.
 
 %cheapest(List, State)
 cheapest([State], State).
