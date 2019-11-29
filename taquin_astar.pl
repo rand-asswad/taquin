@@ -65,7 +65,7 @@ h(State, nilsson, H) :-
     H is Manh + 3 * Ham.
 
 % h/2 alias for calling heuristic function of choice
-h(State, H) :- heuristic(Choice), !, h(State, Choice, H).
+h(State, H) :- heuristic(Choice), !, h(State, Choice, H), !.
 
 % cheapest/2 finds the state with minimum
 % heuristic function from list of states
@@ -103,3 +103,53 @@ path([A,B|T], [D|Path]) :- move(A, B, D), !, path([B|T], Path).
 solvePath(Initial, Path) :-
     solve(Initial, States), % find list of states to goal
     path([Initial|States], Path). % create path from list
+
+%node(State, Path, Heuristic)
+priorityQueue(>, node(_, Path1, H1), node(_, Path2, H2)) :-
+    length(Path1, G1), F1 is G1 + H1,
+    length(Path2, G2), F2 is G2 + H2,
+    F1 >= F2, !.
+priorityQueue(<, node(_, _, _), node(_, _, _)).
+sortQueue(List, Sorted) :- predsort(priorityQueue, List, Sorted).
+
+updateQueue(Node, [], [Node]) :- !.
+updateQueue(node(S1,P1,H1), [node(S2,P2,H2)|Q], [node(S1,P1,H1),node(S2,P2,H2)|Q]) :-
+    length(P1, G1), F1 is G1 + H1,
+    length(P2, G2), F2 is G2 + H2,
+    F1 =< F2, !.
+updateQueue(node(S1,P1,H1), [node(S2,P2,H2)|Q0], [node(S2,P2,H2)|Q]) :-
+    updateQueue(node(S1,P1,H1), Q0, Q).
+
+a_star(Initial, Path) :-
+    h(Initial, H),
+    a_star_search([node(Initial, [], H)], [], Path),
+    !.
+
+% a_star_search(NodeQueue, Path, Solution)
+a_star_search([node(Goal, Path, _)|_], _, Path) :- goal(Goal).
+a_star_search([node(S, P, H)|Queue], Visited, Solution) :-
+    findall(Neighbor, move(S, Neighbor, _), Sneighbors),
+    nodeChildren(node(S, P, H), Sneighbors, Visited, Children),
+    append(Children, Queue, NewQueue),
+    sortQueue(NewQueue, SortedQueue),
+    a_star_search(SortedQueue, [S|Visited], Solution).
+
+% nodeChildren(ParentNode, CandidateChildren, Visited, Children)
+nodeChildren(_, [], _, []) :- !.
+nodeChildren(node(Parent, Path, ParentH), [Child|Others], Visited, [node(Child, [Child|Path], H)|Children]) :-
+    \+member(Child, Visited),
+    h(Child, H),
+    nodeChildren(node(Parent, Path, ParentH), Others, [Child|Visited], Children),
+    !.
+nodeChildren(Node, [_|Others], Visited, Children) :-
+    nodeChildren(Node, Others, Visited, Children),
+    !.
+
+% testing
+dim(3, 3).
+heuristic(manhattan).
+
+puzzle([1,2,3,4,5,0,7,8,6], trivial).
+puzzle([0,1,3,4,2,5,7,8,6], easy).
+puzzle([6,4,7,8,5,0,3,2,1], hard).
+puzzle([8,6,7,2,5,4,3,0,1], hardest).
