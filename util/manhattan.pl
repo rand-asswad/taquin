@@ -1,43 +1,50 @@
+/* module for calculating manhattan distance
+ * used predicates:
+ * dim/2 defines puzzle dimensions (NbRows, nbCols)
+ * goal/1 defines goal state
+ */
+:- dynamic goal/1, dim/2.
 
-/* the Manhattan distance */
-%manhattan(State, State, 0).
-%manhattan(S1, S2, 1) :- move(S1, S2, _).
-%manhattan(S1, S2, N) :- move(S1, T, _), manhattan(T, S2, M), N is M + 1.
-
-% manhattan distance between two indices
+% manh/3: manhattan distance between two flat indices
 manh(Ind1, Ind2, D) :-
-      arrayInd(Ind1, X1, Y1), arrayInd(Ind2, X2, Y2), % switch to coordinates
-      diff(X1, X2, Dx), diff(Y1, Y2, Dy), % calculate coordinates difference
-      D is Dx + Dy. % add differences
+    coord(Ind1, X1, Y1), coord(Ind2, X2, Y2), % switch to coord
+    diff(X1, X2, Dx), diff(Y1, Y2, Dy), % calculate coord difference
+    D is Dx + Dy. % add differences
 
-% return X and Y of a given 1D index (or vice versa)
-arrayInd(Ind, X, Y) :- X is mod(Ind, 3), Y is div(Ind, 3).
+% coord/3: finds XY coordinates of a given flat index
+coord(Ind, X, Y) :-
+    dim(Rows, Cols),
+    X is mod(Ind, Cols),
+    Y is div(Ind, Cols),
+    Y < Rows.
 
-% absolute difference of two numbers
+% diff/3: absolute difference of two numbers
 diff(A, B, Diff) :- D is A - B, Diff is abs(D).
 
-% pos(E, L, Ind)
-% position (index) Ind of first occurence of an element E in a list L
-pos(E, [E|_], 0).
-pos(E, [_|T], Ind) :- pos(E, T, I), Ind is I + 1.
-
-% manhattan distance of the element at position Ind in L1 from L2
-distInd(Ind, L1, _, 0) :- pos(0, L1, Ind). % exclude zero
+% distInd(Ind, L1, L2, D)
+% D is manhattan distance of the element at Ind in L1 from L2
+distInd(Ind, L1, _, 0) :- nth0(Ind, L1, 0). % exclude zero
 distInd(Ind, L1, L2, D) :-
-      pos(E, L1, Ind), % fetch element at Ind from L1
-      pos(E, L2, Ind2), % find its index in L2
-      manh(Ind, Ind2, D). % calculate distance between the indices
+    nth0(Ind,  L1, E), % fetch element at Ind from L1
+    nth0(Ind2, L2, E), % find its index in L2
+    manh(Ind, Ind2, D). % calculate distance between the indices
 
-% cumulative manhattan distance of elements up to Ind
+% distCumul(Ind, L1, L2, D)
+% D is cumulative manhattan distance of elements
+% from L1 up to index Ind, from L2
 distCumul(0, L1, L2, D) :- distInd(0, L1, L2, D).
 distCumul(Ind, L1, L2, D) :-
-      distCumul(Prev, L1, L2, Dc), % cumul dist up to previous index
-      distInd(Ind, L1, L2, Di), % distance of current index
-      Ind is Prev + 1, % define previous
-      D is Di + Dc. % add distances
+    distCumul(Prev, L1, L2, Dc), % cumul dist up to previous index
+    distInd(Ind, L1, L2, Di), % distance of current index
+    Ind is Prev + 1, % define previous
+    D is Di + Dc. % add distances
 
-% manhattan distance between two lists
+% manhattan/3: distance between two lists
 manhattan(L1, L2, D) :-
-      distCumul(N, L1, L2, D), % calculate cumul distance up to length(L1)
-      length(L1, M), % get length(L1)
-      M is N + 1. % exclude last index since we start from 0
+    distCumul(N, L1, L2, D), % cumul distance up to last index in L1
+    length(L1, M), % get length(L1)
+    M is N + 1, % exclude last index (because indices start at 0)
+    !. % cut backtracking when an answer is found
+
+% manhattan/2: alias for calculating manhattan/3 from goal
+manhattan(State, D) :- goal(G), manhattan(State, G, D).
