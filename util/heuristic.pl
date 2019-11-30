@@ -21,12 +21,12 @@
 % h/3: alias for calling heuristic functions
 % h(S, H, D):
 % D is the output of heuristic function H at state S
-h(State, manhattan, H) :- manhattan(State, H).
-h(State, hamming, H) :- hamming(State, H).
-h(State, nilsson, H) :-
+h(State, H, manhattan) :- manhattan(State, H).
+h(State, H, hamming) :- hamming(State, H).
+h(State, H, m3h) :-
     manhattan(State, Manh),
     hamming(State, Ham),
     H is Manh + 3 * Ham.
 
 % h/2 alias for calling heuristic function of choice
-h(State, H) :- heuristic(Choice), !, h(State, Choice, H), !.
+h(State, H) :- heuristic(Choice), !, h(State, H, Choice), !.

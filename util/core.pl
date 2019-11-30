@@ -5,6 +5,7 @@
  * provides:
  * - goal/1: defines goal state
  * - randomPuzzle/2: creates random puzzle
+ * - pathMoves/2: constructs moves list from path
  */
 :- dynamic dim/2.
 :- consult('util/moves.pl').
@@ -33,6 +34,9 @@ makeGoal(N, Count, [Count|T]) :-
 % creates a random puzzle at most N steps
 % away fom goal state
 
-% path/2 gets path from list of states
-path([_], []) :- !.
-path([A,B|T], [D|Path]) :- move(A, B, D), !, path([B|T], Path).
+% pathMoves/2 constructs moves list from states path
+pathMoves([_], []) :- !.
+pathMoves([A,B|T], [D|Path]) :-
+    move(A, B, D),
+    !,
+    pathMoves([B|T], Path).
