@@ -1,12 +1,15 @@
 /* module for calculating hamming distance
- * used predicate dim/2 defines puzzle dimensions (NbRows, nbCols)
+ * uses:
+ * - dim/2: defines puzzle dimensions (NbRows, NbCols)
+ * provides:
+ * - move/3: defines a move between two adjacent states
  */
 :- dynamic dim/2.
 
 % move(Before, After, Direction) :
 % After is the result of moving one tile
 % from the Before state
-% in the direction D
+% in the Direction
 move(Before, After, left) :- left(Before, After).
 move(Before, After, right) :- right(Before, After).
 move(Before, After, up) :- up(Before, After).

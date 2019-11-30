@@ -1,7 +1,9 @@
 /* module for calculating manhattan distance
- * used predicates:
- * dim/2 defines puzzle dimensions (NbRows, nbCols)
- * goal/1 defines goal state
+ * uses:
+ * - dim/2 defines puzzle dimensions (NbRows, NbCols)
+ * - goal/1 defines goal state
+ * provides:
+ * - manhattan/2: manhattan heuristic function
  */
 :- dynamic goal/1, dim/2.
 

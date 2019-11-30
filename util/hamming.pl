@@ -1,5 +1,8 @@
 /* module for calculating hamming distance
- * used predicate goal/1 that defines goal state
+ * uses:
+ * - goal/1: defines goal state
+ * provides:
+ * - hamming/2: hamming heuristic function
  */
 :- dynamic goal/1.
 
