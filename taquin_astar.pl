@@ -4,7 +4,7 @@
  * - heuristic/1: defines heuristic function for greedy
  * - 'util/core.pl': for core puzzle definition predicates
  * provides:
- * - astar/2: Depth-First Search algorithm
+ * - astar/2: A* Search algorithm
  */
 :- dynamic dim/2, heuristic/1.
 :- consult('util/core.pl').
@@ -32,9 +32,10 @@ pushQueue(node(S1,P1,F1), [node(S2,P2,F2)|Q0], [node(S2,P2,F2)|Q]) :-
 appendQueue([], Q, Q).
 appendQueue([Node|T], Q0, Q) :- pushQueue(Node, Q0, Q1), appendQueue(T, Q1, Q).
 
+% astar/2: A* search algorithm
 astar(Initial, Path) :-
     h(Initial, H), % cost of initial state: f(n) = h(n)
-    astar_search([node(Initial, [], H)], [], Path), % run astar search
+    astar_search([node(Initial, [], H)], [Initial], Path), % run astar search
     !.
 
 % astar_search(NodeQueue, Path, Solution)
@@ -46,7 +47,7 @@ astar_search([node(S, P, H)|Queue], Visited, Solution) :-
     astar_search(SortedQueue, [S|Visited], Solution).
 
 % nodeChildren(ParentNode, CandidateChildren, Visited, Children)
-% expand children of a node
+% expands children of a node
 nodeChildren(_, [], _, []) :- !. % no candidates no children
 nodeChildren(node(Parent, Path, ParentF), [Child|Others], Visited,
         [node(Child, [Child|Path], F)|Children]) :-
