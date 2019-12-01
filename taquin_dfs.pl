@@ -6,19 +6,37 @@
  * - 'util/core.pl': for core puzzle definition predicates
  * provides:
  * - dfs/2: Depth-First Search algorithm
+ * - iddfs/2: Iterative Deepening DFS algorithm
  * - greedy/2: greedy graph search
  */
 :- dynamic dim/2, heuristic/1.
 :- consult('util/core.pl').
 
 % Depth-First Search algorithm (simple prolog tree span)
-% dfs/2: alias for calling dfs/3
+% with no optimality guaranty
 dfs(Initial, States) :- dfs(Initial, [], States).
-dfs(Initial, States, States) :- goal(Initial), !.
+dfs(Initial, States, States) :- goal(Initial).
 dfs(Initial, Visited, States) :-
     move(Initial, State, _), % try a move
     \+member(State, Visited), % make sure new state hasn't been visited
     dfs(State, [State|Visited], States). % find path from new state
+
+% Iterative deepening DFS
+% iddfs/2: iterative deepening search starting at depth h(initial)
+% an optimal solution is guaranteed for an admissible heuristic
+iddfs(Initial, Path) :- h(Initial, H), iddfs(Initial, Path, H).
+iddfs(Initial, Path, Depth) :- iddfs(Initial, [], Path, Depth).
+iddfs(Initial, Path, H) :- H1 is H + 1, iddfs(Initial, Path, H1).
+
+% iddfs/4: iterative deepening search for paths
+% of maximum depth D
+iddfs(State, Path, Path, _) :- goal(State).
+iddfs(State, Visited, Solution, D) :-
+    D > 0, % non-zero depth
+    move(State, S, _), % possible move
+    \+member(S, Visited), % unvisited move
+    D1 is D - 1, % decrement depth
+    iddfs(S, [S|Visited], Solution, D1). % path from new state
 
 
 % cheapest/2 finds the state with minimum
@@ -39,10 +57,9 @@ bestMove(State, Visited, Next) :-
     % pick neighbor with minimum heuristic function
     cheapest(Neighbors, Next).
 
-% greedy/2: alias for calling greedy/3
-% greedy(State, List): finds list of states to goal
-% state from given State 
-greedy(Initial, States) :- greedy(Initial, [], States), !.
+% greedy/2: greedy path search using any heuristic 
+% admissible or not with no optimality guaranty
+greedy(Initial, States) :- greedy(Initial, [], States).
 greedy(Initial, States, States) :- goal(Initial).
 greedy(Initial, Visited, AllStates) :-
     bestMove(Initial, Visited, State), % find best move from Initial

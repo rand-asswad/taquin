@@ -14,4 +14,4 @@ puzzle([6,4,7,8,5,0,3,2,1], hardest). % 31 moves
 puzzle([8,6,7,2,5,4,3,0,1], hardest). % 31 moves
 
 % test using the following query.
-%?- puzzle(Puzzle, Difficulty), testPuzzle(Puzzle, Algorithm).
+%?- puzzle(Puzzle, Difficulty), testPuzzle(Puzzle, ?Algorithm, ?Heuristic).
