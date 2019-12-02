@@ -139,11 +139,11 @@ Cette heuristique est admissible.
 7 & 6 & 5 & 7 & 8 &   \\
 \hlineB{3}
 \end{tabular}\hfill%
-\begin{tabular}{V{3}cV{3}c|c|c|c|c|c|c|cV{3}c|c|c|c|c|c|c|cV{3}}\hlineB{3}
-Heuristique & \multicolumn{8}{cV{3}}{Hamming} & \multicolumn{8}{cV{3}}{Manhattan} \\\hlineB{3}
-Tuile    & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8  &  1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\\hline
-Distance & 1 & 1 & 0 & 0 & 1 & 1 & 0 & 1  &  1 & 2 & 0 & 0 & 2 & 2 & 0 & 3 \\\hline
-Total    & \multicolumn{8}{cV{3}}{5}      & \multicolumn{8}{cV{3}}{10} \\\hlineB{3}
+\begin{tabular}{V{3}cV{3}c|c|c|c|c|c|c|cV{3}c|c|c|c|c|c|c|cV{3}cV{3}}\hlineB{3}
+Heuristique & \multicolumn{8}{cV{3}}{Hamming} & \multicolumn{8}{cV{3}}{Manhattan} & $h^*$ \\\hlineB{3}
+Tuile    & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8  &  1 & 2 & 3 & 4 & 5 & 6 & 7 & 8  & \\\hline
+Distance & 1 & 1 & 0 & 0 & 1 & 1 & 0 & 1  &  1 & 2 & 0 & 0 & 2 & 2 & 0 & 3  & \\\hline
+Total    & \multicolumn{8}{cV{3}}{5}      & \multicolumn{8}{cV{3}}{10}      & 14 \\\hlineB{3}
 \end{tabular}
 
 \caption{Heuristiques de Hamming et de Manhattan}
