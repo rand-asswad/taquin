@@ -138,7 +138,7 @@ Cette heuristique est admissible.
 4 &   & 2 & 4 & 5 & 6 \\ \hline
 7 & 6 & 5 & 7 & 8 &   \\
 \hlineB{3}
-\end{tabular}\hfill%
+\end{tabular}~%
 \begin{tabular}{V{3}cV{3}c|c|c|c|c|c|c|cV{3}c|c|c|c|c|c|c|cV{3}cV{3}}\hlineB{3}
 Heuristique & \multicolumn{8}{cV{3}}{Hamming} & \multicolumn{8}{cV{3}}{Manhattan} & $h^*$ \\\hlineB{3}
 Tuile    & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8  &  1 & 2 & 3 & 4 & 5 & 6 & 7 & 8  & \\\hline
@@ -178,19 +178,20 @@ et ne trouve pas toujours une solution (overflow ou timeout).
 
 L'algorithme ID-DFS est une variante du DFS, il effectue
 une recherche en profondeur DFS itérativement pour un
-profondeur limite donnée $D$, et l'incrémente succéssivement
-en commençant par $D=0$ jusqu'à ce qu'il trouve une solution. [@wiki:iddfs]
+profondeur limite donnée $d$, et l'incrémente succéssivement
+en commençant par $d=0$ jusqu'à ce qu'il trouve une solution. [@wiki:iddfs]
 
-Classiquement, $D=0$ à la première itération mais cela est
+Classiquement, $d=0$ à la première itération mais cela est
 loin d'être optimale, nous proposons donc de commencer par
 une sous-estimation du longeur du chemin,
-$D=h(n_\text{initial})$ est une sous-estimation si $h$
+$d=h(n_\text{initial})$ est une sous-estimation si $h$
 est une heuristique admissible.
 
 **Compléxité**
 
 - Compléxité en temps: $O(b^d)$
 - Compléxité spaciale: $O(d)$
+
 où $d$ est le profondeur, et $b$ est le facteur de branchement.
 
 L'algorithme trouve en quelques secondes des solutions optimales

@@ -1764,19 +1764,19 @@ et ne trouve pas toujours une solution (overflow ou timeout).</p>
 <h2>Iterative Deepening DFS (ID-DFS)</h2>
 <p>L’algorithme ID-DFS est une variante du DFS, il effectue
 une recherche en profondeur DFS itérativement pour un
-profondeur limite donnée <span class="math inline">\(D\)</span>, et l’incrémente succéssivement
-en commençant par <span class="math inline">\(D=0\)</span> jusqu’à ce qu’il trouve une solution. <span class="citation">(Wikipedia contributors <a href="#ref-wiki:iddfs" role="doc-biblioref">2019</a><a href="#ref-wiki:iddfs" role="doc-biblioref">b</a>)</span></p>
-<p>Classiquement, <span class="math inline">\(D=0\)</span> à la première itération mais cela est
+profondeur limite donnée <span class="math inline">\(d\)</span>, et l’incrémente succéssivement
+en commençant par <span class="math inline">\(d=0\)</span> jusqu’à ce qu’il trouve une solution. <span class="citation">(Wikipedia contributors <a href="#ref-wiki:iddfs" role="doc-biblioref">2019</a><a href="#ref-wiki:iddfs" role="doc-biblioref">b</a>)</span></p>
+<p>Classiquement, <span class="math inline">\(d=0\)</span> à la première itération mais cela est
 loin d’être optimale, nous proposons donc de commencer par
 une sous-estimation du longeur du chemin,
-<span class="math inline">\(D=h(n_\text{initial})\)</span> est une sous-estimation si <span class="math inline">\(h\)</span>
+<span class="math inline">\(d=h(n_\text{initial})\)</span> est une sous-estimation si <span class="math inline">\(h\)</span>
 est une heuristique admissible.</p>
 <p><strong>Compléxité</strong></p>
 <ul>
 <li>Compléxité en temps: <span class="math inline">\(O(b^d)\)</span></li>
-<li>Compléxité spaciale: <span class="math inline">\(O(d)\)</span>
-où <span class="math inline">\(d\)</span> est le profondeur, et <span class="math inline">\(b\)</span> est le facteur de branchement.</li>
+<li>Compléxité spaciale: <span class="math inline">\(O(d)\)</span></li>
 </ul>
+<p>où <span class="math inline">\(d\)</span> est le profondeur, et <span class="math inline">\(b\)</span> est le facteur de branchement.</p>
 <p>L’algorithme trouve en quelques secondes des solutions optimales
 pour toutes les configurations de taille <span class="math inline">\(3\times3\)</span>,
 et trouve rarement des solution pour les tailles plus grandes.</p>
