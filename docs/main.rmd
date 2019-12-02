@@ -1,6 +1,9 @@
 ---
 title: "Le Jeu du Taquin"
 lang: fr-FR
+bibliography: ref.bib
+biblio-style: "apalike"
+link-citations: true
 ---
 ```{r setup, include=FALSE}
 library(knitr)
@@ -12,6 +15,8 @@ opts_knit$set(root.dir = proj)
 # set chunk options
 opts_chunk$set(fig.pos = 'H')
 opts_chunk$set(comment = NA)
+```
+```{r child='include/math.tex'}
 ```
 
 \pagebreak
