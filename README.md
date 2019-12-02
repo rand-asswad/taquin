@@ -30,8 +30,8 @@ heuristic for the chosen algorithm (recommended).
 - **Iterative Deepening DFS (ID-DFS):** analog to DFS with a given Depth, starts with an
   underestimate of the optimal depth (an admissible heuristic)
   and increments the depth successively until a solution is found.
-  Optimality is guarantied, however it can be slow for complex puzzles.
-  Nevertheless, no overflow problems as the algorithm does not keep track of paths.
+  Optimality is guarantied, solutions are almost always fast for 3×3 puzzles.
+  Nevertheless, for complex puzzles bigger than 3×3 the ID-DFS is as hopeless as DFS.
 - **Greedy Search:** a simple greedy algorithms that chooses each step by minimizing a
   heuristic (admissible or not), there is no optimality guaranty but the algorithm
   is fast and finds a solution for all 3x3 puzzles with the `m3h` heuristic,
@@ -42,7 +42,7 @@ heuristic for the chosen algorithm (recommended).
   of complex puzzles.
 
 The code is well-documented and readable,
-for more details the report is in [docs/book.pdf](https://rand-asswad.github.io/taquin)
+for more details the report is in [docs/book.pdf](https://rand-asswad.github.io/taquin/book.pdf)
 written in French (as the project is part of Masters program at INSA Rouen).
 
 # To-Do List
