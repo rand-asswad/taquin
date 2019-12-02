@@ -24,7 +24,7 @@ dfs(Initial, Visited, States) :-
 % Iterative deepening DFS
 % iddfs/2: iterative deepening search starting at depth h(initial)
 % an optimal solution is guaranteed for an admissible heuristic
-iddfs(Initial, Path) :- h(Initial, H), iddfs(Initial, Path, H).
+iddfs(Initial, Path) :- h(Initial, H), iddfs(Initial, Path, H), !.
 iddfs(Initial, Path, Depth) :- iddfs(Initial, [], Path, Depth).
 iddfs(Initial, Path, H) :- H1 is H + 1, iddfs(Initial, Path, H1).
 

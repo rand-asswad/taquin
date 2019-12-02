@@ -13,10 +13,10 @@
 :- dynamic dim/2, move/3, solve/3, solve/4, setNth0/4.
 
 removeZero(S0, S) :- nth0(Ind, S0, 0), setNth0(Ind, ' ', S0, S).
-printState(S0) :- removeZero(S0, S), printState(S).
-printState(S) :- dim(3,3), format('~a  ~a  ~a\n~a  ~a  ~a\n~a  ~a  ~a\n', S).
-printState(S) :- dim(3,4), format('~a  ~a  ~a  ~a\n~a  ~a  ~a  ~a\n~a  ~a  ~a  ~a\n', S).
-printState(S) :- dim(4,4), format('~a  ~a  ~a  ~a\n~a  ~a  ~a  ~a\n~a  ~a  ~a  ~a\n~a  ~a  ~a  ~a\n', S).
+printState(S0) :- removeZero(S0, S), printState0(S).
+printState0(S) :- dim(3,3), format('~a  ~a  ~a\n~a  ~a  ~a\n~a  ~a  ~a\n', S).
+printState0(S) :- dim(3,4), format('~a  ~a  ~a  ~a\n~a  ~a  ~a  ~a\n~a  ~a  ~a  ~a\n', S).
+printState0(S) :- dim(4,4), format('~a  ~a  ~a  ~a\n~a  ~a  ~a  ~a\n~a  ~a  ~a  ~a\n~a  ~a  ~a  ~a\n', S).
 
 printSolution(State, []) :- printState(State).
 printSolution(Puzzle, [S|Path]) :-

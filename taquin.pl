@@ -18,6 +18,6 @@ solve(Puzzle, Solution, Algorithm, Heuristic) :-
 
 % solve/3 default heuristics
 solve(Puzzle, Solution, dfs) :- dfs(Puzzle, Solution).
-solve(Puzzle, Solution, iddfs) :- solve(Puzzle, Solution, iddfs, manhattan).
+solve(Puzzle, Solution, iddfs) :- solve(Puzzle, Solution, iddfs, manhattan), !.
 solve(Puzzle, Solution, greedy) :- solve(Puzzle, Solution, greedy, m3h).
 solve(Puzzle, Solution, astar) :- solve(Puzzle, Solution, astar, manhattan).
