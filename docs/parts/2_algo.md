@@ -1,7 +1,7 @@
 # Algorithmes
 
 Ils existent de nombreux algorithmes pour la recherche
-d'un chemin dans un graphe, nous avons implémentés
+d'un chemin dans un graphe, nous avons implémenté
 quelques algorithmes qui correspondent bien à notre
 problème et qui s'adaptent bien aux principes
 de la programmation logique.
@@ -75,7 +75,8 @@ nous allons ainsi introduire la notion d'**heuristique**.
 Une **fonction heuristique** sur un graphe est une fonction
 $h:E\rightarrow\N$ où $E$ est l'espace d'états du problème,
 $h(n)$ représente le coût estimé pour arriver au but
-à partir du nœud $n$.
+à partir du nœud $n$, on appelle *coût* d'un chemin
+la longueur d'un chemin.
 
 On appelle **heuristique admissible** une heuristique $h$ telle que
 $$ \forall n\in E, h(n) \leq h^*(n) $$
@@ -117,15 +118,24 @@ La distance de Manhattan est la distance $L_1$ dans les espaces de Banach.
 Soit $V$ un espace de Banach de dimension $n$.
 \begin{align*}
 d_1: V \times V &\rightarrow \R_+\\
-(x, y) &\mapsto \sum_{i=1}^n |x_i - y_i|
+(x, y) &\mapsto \sum_{i=1}^{\dim V} |x_i - y_i|
 \end{align*}
 
-Dans notre contexte, la distance est définie sur
-$\{1,\ldots,n\}\times\{1,\ldots,m\}$
-et ne prend pas en compte de la case vide.
+Dans notre contexte, la distance $d_1$ est définie sur
+$V=\{1,\ldots,n\}\times\{1,\ldots,m\}$, soit $I=\{1,\ldots,nm-1\}$,
+on définit la fonction de position d'une tuile dans un état $e\in E$
+\begin{align*}
+\textrm{pos}_e: I &\rightarrow V\\
+p &\mapsto (i, j)
+\end{align*}
+La distance de Manhattan entre deux états se donne donc par
+\begin{align*}
+d_{\text{Manhattan}}: E \times E &\rightarrow \N\\
+(u, v) &\mapsto \sum_{p\in I} d_1\left(\textrm{pos}_u(p), \textrm{pos}_v(p)\right)
+\end{align*}
 
 De même, l'heuristique de Manhattan est la distance entre
-le nœud $n$ et le nœud final.
+le nœud $n$ et le nœud final et ne prend pas compte de la case vide.
 Cette heuristique est admissible.
 
 \begin{table}[H]
@@ -148,12 +158,8 @@ Total    & \multicolumn{8}{cV{3}}{5}      & \multicolumn{8}{cV{3}}{10}      & 14
 
 \caption{Heuristiques de Hamming et de Manhattan}
 \end{table}
-<figure>
+<figure id="fig1">
   <img src="img/heuristics.png">
-  <figcaption><b>Table 1</b> -- Heuristiques de Hamming et de Manhattan</br>
-  source: <a href="https://www.cs.princeton.edu/courses/archive/spring18/cos226/assignments/8puzzle/index.html">
-  Princeton University - Computer Science Course COS226</a>
-  </figcaption>
 </figure>
 
 ## Algorithme Greedy
@@ -163,7 +169,7 @@ un algorithme d'optimisation locale;
 lorsqu'il faut faire un choix parmi une liste d'adjacents
 il prend l'adjacent qui minimise la fonction coût.
 
-L'algorithme est complet mais pas toujours optimale,
+L'algorithme n'est pas toujours optimale,
 dans notre implémentation nous avons obtenue les meilleurs
 résultats pour l'heuristique définie par
 
@@ -172,20 +178,21 @@ $$ h(n) := \textrm{Manhattan}(n) + 3\cdot\textrm{Hamming}(n) $$
 Cette heuristique n'est pas admissible car elle vaut
 pour un état $n$ adjacent au but
 $$h(n) = (1) + 3(1) = 4 > 1 = h^*(n)$$
-mais cela n'a aucune importance dans cet algorithme.
+mais l'admissiblité n'est pas importante pour cet algorithme.
 
 L'algorithme trouve une solution en quelques secondes
 pour toutes les configurations du taquin de taille $3\times3$,
-la plupart des solutions ne sont pas optimales.
+la plupart de ses solutions ne sont pas optimales.
 
 Pour les tailles plus grandes, l'algorithme prends plus de temps
-et ne trouve pas toujours une solution (overflow ou timeout).
+et ne trouve pas toujours une solution car ses choix locaux
+sont définitifs (il n'y a pas d'alternatif dans le backtracking).
 
 ## Iterative Deepening DFS (ID-DFS)
 
 L'algorithme ID-DFS est une variante du DFS, il effectue
 une recherche en profondeur DFS itérativement pour un
-profondeur limite donnée $d$, et l'incrémente succéssivement
+profondeur maximal donnée $d$, et l'incrémente succéssivement
 en commençant par $d=0$ jusqu'à ce qu'il trouve une solution. [@wiki:iddfs]
 
 Classiquement, $d=0$ à la première itération mais cela est
@@ -194,7 +201,7 @@ une sous-estimation du longeur du chemin,
 $d=h(n_\text{initial})$ est une sous-estimation si $h$
 est une heuristique admissible.
 
-**Compléxité**
+### Compléxité {-}
 
 - Compléxité en temps: $O(b^d)$
 - Compléxité spaciale: $O(d)$
@@ -210,7 +217,7 @@ comme DFS et a les mêmes problèmes.
 
 ## Algorithme A\*
 
-L'algorithme A\* est un complet, optimal et efficace.
+L'algorithme A\* est complet, optimal et efficace.
 C'est un algorithme *à mémoire*, qui a une compléxité
 spaciale importante.
 
@@ -220,7 +227,7 @@ où
 
 - $f(n)$ le coût total estimé au nœud $n$
 - $g(n)$ le vrai coût pour arriver au nœud $n$ à partir du nœud initial
-- $h(n)$ le coût estimé pour arrivé au but à partir du nœud $n$
+- $h(n)$ le coût estimé pour arriver au but à partir du nœud $n$
 
 Il garde une liste des candidats, et en choisit
 succéssivement celui qui minimise le coût $f$ et rajoute
@@ -233,13 +240,14 @@ tous ses états adjacents (non visité) à la liste des candidats.
 \textit{source:} \href{https://www.cs.princeton.edu/courses/archive/spring18/cos226/assignments/8puzzle/index.html}%
 {Princeton University - Computer Science Course COS226}}
 \end{figure}
+<figure id="fig2"><img src="img/astar_tree.png"></figure>
 
 Les solutions obtenues sont optimale si l'heuristique est
 admissible, les meilleurs résultats sont obtenus pour la distance
 de Manhattan. [@wiki:astar]
 
-Pour les configurations faciles la solution est obtenue instantanément,
-mais pour les configurations faciles l'algorithme peut prendre plus
+Pour les configurations faciles les solutions sont obtenues instantanément,
+mais pour les configurations difficiles l'algorithme peut prendre plus
 de temps que les algorithmes précédents.
-Cependant, pour les tailles plus grande que $3\times3$, A\* est le
+Néanmoins, pour les tailles plus grande que $3\times3$, A\* est le
 meilleur algorithme pour trouver une solution.

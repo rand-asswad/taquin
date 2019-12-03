@@ -10,19 +10,19 @@ Notre programme donc est modulaire et réutilisable.
 ```
 taquin
 ├── util
-│   ├── core.pl....................core predicates
-│   ├── hamming.pl.................hamming heuristic definition
-│   ├── heuristic.pl...............heuristics wrapper predicates
-│   ├── manhattan.pl...............manhattan heuristic definition
-│   ├── moves.pl...................states adjacency
-│   └── test.pl....................testing tools
-├── taquin_astar.pl................A* algorithm
-├── taquin_dfs.pl..................DFS-style algorithms
-├── taquin.pl......................taquin solver wrapper
-├── test_3x3.pl....................3×3 example puzzles
-├── test_3x4.pl....................3×4 example puzzles
-├── test_4x4.pl....................4×4 example puzzles
-└── README.md......................quick usage guide
+│   ├── core.pl....................modèle principale du jeu
+│   ├── hamming.pl.................définition de l'heuristique hamming
+│   ├── heuristic.pl...............wrapper pour les heuristiques
+│   ├── manhattan.pl...............définition de l'heuristique manhattan
+│   ├── moves.pl...................définition des adjacents
+│   └── test.pl....................outils pour tester le programme
+├── taquin_astar.pl................algorithme A*
+├── taquin_dfs.pl..................algorithme du type DFS
+├── taquin.pl......................wrapper principal
+├── test_3x3.pl....................exemples de puzzles 3×3
+├── test_3x4.pl....................exemples de puzzles 3×4
+├── test_4x4.pl....................exemples de puzzles 4×4
+└── README.md......................petit guide d'utilisation
 ```
 
 Nous avons implémenté le jeu taquin $n\times m$ à l'aide du prédicat
@@ -35,7 +35,7 @@ définit l'état objectif pour la dimension prédéfinie dans
 la base de connaissance. Le module `core` dépend des modules
 `util/moves` et `util/heuristic`.
 
-Le module `util/moves` définit l'adjacente à l'aide du prédicat `move/3`
+Le module `util/moves` définit l'adjacence à l'aide du prédicat `move/3`
 ```prolog
 move(Before, After, Direction)
 ```
@@ -45,7 +45,7 @@ direction `Direction` l'état `After` est obtenu.
 Le module `util/heuristic` fournit le prédicat `h/2` qui calcule
 la fonction heuristique d'un état donné, la fonction heuristique
 à utiliser doit être définie dans la base de connaissance à l'aide
-du prédicat `heuristic/1` qui accepte les valeurs `manhattan`,
+du prédicat `heuristic/1` qui prend l'une des valeurs `manhattan`,
 `hamming` et `m3h`.
 Ce module dépend des modules `util/manhattan` et `util/hamming`.
 
@@ -73,7 +73,7 @@ de l'algorithme choisi (recommandé).
 
 ### Depth-First Search
 
-La définition du prédit `dfs` est similaire à celle présenté
+La définition du prédicat `dfs` est similaire à celle présentée
 dans l'explication de l'agorithme en y rajoutant la contrainte
 `\+member(E, Chemin)` afin d'éviter les problèmes dont nous
 avons parlé.
@@ -152,6 +152,12 @@ bestMove(State, Visited, Next) :-
     % en choisir le voisin qui minimise l'heuristique
     cheapest(Neighbors, Next).
 ```
+
+On voit que contairement à `dfs/3` qui contient la clause `move(Initial, State, _)`
+permettant d'obtenir `State` dans toutes les directions possibles, `greedy/3`
+contient la clause `bestMove(Initial, Visited, State)` qui choisit toujours
+le même `State` même si le chemin ne mène pas au but, l'algorithme
+peut donc simplement échouer s'il se trouve dans un état sans nouveaux voisins.
 
 ### Algorithme A\*
 
@@ -288,7 +294,7 @@ voici les résultats trouvés pour les puzzles de taille $3\times3$.
 \hlineB{3}
 \state{1&2&3\\4&5& \\7&8&6} & triviale  & \makecell{$t=13$ms\\$N=1$}    & \makecell{$t=3$ms\\$N=1$}         & \makecell{$t=9$ms\\$N=1$}       &  1 & 1 &  4 \\\hline
 \state{ &1&3\\4&2&5\\7&8&6} & facile    & \makecell{$t=18$ms\\$N=4$}    & \makecell{$t=6$ms\\$N=4$}         & \makecell{$t=19$ms\\$N=4$}      &  4 & 4 & 16 \\\hline
-\state{8&1&3\\4& &2\\7&6&5} & moyenme   & \makecell{$t=96$ms\\$N=34$}   & \makecell{$t=237$ms\\$N=14$}      & \makecell{$t=210$ms\\$N=14$}    & 10 & 5 & 25 \\\hline
+\state{8&1&3\\4& &2\\7&6&5} & moyenne   & \makecell{$t=96$ms\\$N=34$}   & \makecell{$t=237$ms\\$N=14$}      & \makecell{$t=210$ms\\$N=14$}    & 10 & 5 & 25 \\\hline
 \state{4&3&8\\2& &1\\6&5&7} & difficile & \makecell{$t=418$ms\\$N=176$} & \makecell{$t=6~916$ms\\$N=20$}    & \makecell{$t=587$ms\\$N=20$}    & 16 & 8 & 40 \\\hline
 \state{6&4&7\\8&5& \\3&2&1} & maximale  & \makecell{$t=108$ms\\$N=45$}  & \makecell{$t=9~233$ms\\$N^*=41$}  & \makecell{$t=27~005$ms\\$N=31$} & 21 & 7 & 42 \\\hline
 \state{8&6&7\\2&5&4\\3& &1} & maximale  & \makecell{$t=644$ms\\$N=243$} & \makecell{$t=23~124$ms\\$N^*=41$} & \makecell{$t=21~933$ms\\$N=31$} & 21 & 7 & 42 \\\hline
@@ -296,9 +302,8 @@ voici les résultats trouvés pour les puzzles de taille $3\times3$.
 \end{tabular}
 \caption{Comparaison des algorithmes sur des taquin de taille $3\times3$}
 \end{table}
-<figure>
+<figure id="fig3">
   <img src="img/results.png">
-  <figcaption><b>Table 2</b> -- Comparaison des algorithmes sur des taquin de taille 3×3</figcaption>
 </figure>
 
 Les états classés de difficulté *maximale* sont les configurations

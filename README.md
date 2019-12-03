@@ -5,7 +5,7 @@ using A* graph search algorithm for N×M size puzzles.
 
 ![](docs/img/cover_img.png)
 
-# Usage
+## Usage
 
 The code is implemented for [SWI Prolog](https://www.swi-prolog.org/) environment.
 
@@ -23,7 +23,27 @@ puzzle(Puzzle, Difficulty), testPuzzle(Puzzle, ?Algorithm, ?Heuristic).
 heuristic for the chosen algorithm (recommended).
 - The `Algorithm` can be ommitted, the default value is `astar`.
 
-# Search Algorithms
+## Project Structure
+
+```
+taquin
+├── util
+│   ├── core.pl....................core predicates
+│   ├── hamming.pl.................hamming heuristic definition
+│   ├── heuristic.pl...............heuristics wrapper predicates
+│   ├── manhattan.pl...............manhattan heuristic definition
+│   ├── moves.pl...................states adjacency
+│   └── test.pl....................testing tools
+├── taquin_astar.pl................A* algorithm
+├── taquin_dfs.pl..................DFS-style algorithms
+├── taquin.pl......................taquin solver wrapper
+├── test_3x3.pl....................3×3 example puzzles
+├── test_3x4.pl....................3×4 example puzzles
+├── test_4x4.pl....................4×4 example puzzles
+└── README.md......................quick usage guide
+```
+
+## Search Algorithms
 
 - **Depth-First Search (DFS):** a simple implementation of DFS using prolog's search trees,
   there is no optimality guaranty, probable overflow because of the lack of depth control.
@@ -45,7 +65,7 @@ The code is well-documented and readable,
 for more details the report is in [docs/book.pdf](https://rand-asswad.github.io/taquin/book.pdf)
 written in French (as the project is part of Masters program at INSA Rouen).
 
-# To-Do List
+## To-Do List
 
 - Implement IDA\*
 - Implement random puzzle generator

@@ -15,6 +15,7 @@ bookdown::html_document2:
   css: include/styles.css
   includes:
     in_header: include/header.html
+    after_body: include/scripts.html
 beamer_presentation:
   keep_tex: false
   slide_level: 1
