@@ -219,6 +219,14 @@ Il garde une liste des candidats, et en choisit
 succéssivement celui qui minimise le coût $f$ et rajoute
 tous ses états adjacents (non visité) à la liste des candidats.
 
+\begin{figure}
+\centering
+\includegraphics{img/astar_tree.png}
+\caption{Une partie de la graphe de résolution A${}^*$\newline
+(\textit{source:} \href{https://www.cs.princeton.edu/courses/archive/spring18/cos226/assignments/8puzzle/index.html}%
+{Princeton University - Computer Science Course COS226})}
+\end{figure}
+
 Les solutions obtenues sont optimale si l'heuristique est
 admissible, les meilleurs résultats sont obtenus pour la distance
 de Manhattan. [@wiki:astar]
