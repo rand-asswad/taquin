@@ -1,5 +1,5 @@
 :- consult('taquin.pl').
-:- consult('util/print.pl').
+:- consult('util/test.pl').
 
 dim(4, 4).
 

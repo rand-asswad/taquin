@@ -8,6 +8,7 @@
  * - printState/1
  * - printSolution/2
  * - testPuzzle/3, testPuzzle/2, testPuzzle/1
+ * - debugPuzzle/3
  */
 
 :- dynamic dim/2, move/3, solve/3, solve/4, setNth0/4.
@@ -39,3 +40,11 @@ testPuzzle(Puzzle, Algorithm) :-
     format('# of moves: ~d\n', N).
 
 testPuzzle(Puzzle) :- testPuzzle(Puzzle, astar).
+
+debugPuzzle(Puzzle, Algorithm, H) :-
+    statistics(walltime, _),
+    solve(Puzzle, Path, Algorithm, H),
+    statistics(walltime, [_, ExecutionTime]),
+    length(Path, N),
+    write('Time elapsed: '), write(ExecutionTime), write(' ms'), nl,
+    write('Path length: '), write(N), nl.

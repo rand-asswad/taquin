@@ -35,8 +35,7 @@ appendQueue([Node|T], Q0, Q) :- pushQueue(Node, Q0, Q1), appendQueue(T, Q1, Q).
 % astar/2: A* search algorithm
 astar(Initial, Path) :-
     h(Initial, H), % cost of initial state: f(n) = h(n)
-    astar_search([node(Initial, [], H)], [Initial], Path), % run astar search
-    !.
+    astar_search([node(Initial, [], H)], [Initial], Path). % run astar search
 
 % astar_search(NodeQueue, Path, Solution)
 astar_search([node(Goal, Path, _)|_], _, Path) :- goal(Goal).
@@ -56,5 +55,4 @@ nodeChildren(node(Parent, Path, ParentF), [Child|Others], Visited,
     nodeChildren(node(Parent, Path, ParentF), Others, [Child|Visited], Children),
     !.
 nodeChildren(Node, [_|Others], Visited, Children) :- % child node has ben visited
-    nodeChildren(Node, Others, Visited, Children), % try other children
-    !.
+    nodeChildren(Node, Others, Visited, Children). % try other children
