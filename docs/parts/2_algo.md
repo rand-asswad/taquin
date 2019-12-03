@@ -128,7 +128,7 @@ De même, l'heuristique de Manhattan est la distance entre
 le nœud $n$ et le nœud final.
 Cette heuristique est admissible.
 
-\begin{figure}
+\begin{table}[H]
 \centering
 \begin{tabular}{V{3}c|c|cV{3}c|c|cV{3}}
 \hlineB{3}
@@ -147,7 +147,14 @@ Total    & \multicolumn{8}{cV{3}}{5}      & \multicolumn{8}{cV{3}}{10}      & 14
 \end{tabular}
 
 \caption{Heuristiques de Hamming et de Manhattan}
-\end{figure}
+\end{table}
+<figure>
+  <img src="img/heuristics.png">
+  <figcaption><b>Table 1</b> -- Heuristiques de Hamming et de Manhattan</br>
+  source: <a href="https://www.cs.princeton.edu/courses/archive/spring18/cos226/assignments/8puzzle/index.html">
+  Princeton University - Computer Science Course COS226</a>
+  </figcaption>
+</figure>
 
 ## Algorithme Greedy
 
@@ -222,9 +229,9 @@ tous ses états adjacents (non visité) à la liste des candidats.
 \begin{figure}
 \centering
 \includegraphics{img/astar_tree.png}
-\caption{Une partie de la graphe de résolution A${}^*$\newline
-(\textit{source:} \href{https://www.cs.princeton.edu/courses/archive/spring18/cos226/assignments/8puzzle/index.html}%
-{Princeton University - Computer Science Course COS226})}
+\caption{Une partie de la graphe de résolution A${}^*$\\
+\textit{source:} \href{https://www.cs.princeton.edu/courses/archive/spring18/cos226/assignments/8puzzle/index.html}%
+{Princeton University - Computer Science Course COS226}}
 \end{figure}
 
 Les solutions obtenues sont optimale si l'heuristique est

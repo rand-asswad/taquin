@@ -1,12 +1,16 @@
 \geometry{paper=a4paper, margin=2.2cm}
 \usepackage[defaultlines=10,all]{nowidow}
 \usepackage{float}
+\usepackage[justification=centering]{caption}
 
 % force babel to use default item labels
 \frenchsetup{StandardItemLabels=true}
 
 % tables
 \usepackage{boldline} % provides V{n} and \hlineB{n}
+\usepackage{makecell} % for line breaks inside cell
+\usepackage{multirow} % for multirow cells
+\newcommand{\state}[1]{{$\begin{matrix}#1\end{matrix}$}}
 
 % math
 %\usepackage{amsmath}
@@ -20,7 +24,7 @@
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \lhead{\@title}
-\rhead{\@author}
+\rhead{Programmation logique -- Génie Mathématique}
 
 \usepackage{pmboxdraw} % for tree chars encoding
 

@@ -275,3 +275,44 @@ et lancer la requête suivante:
 ```
 
 ## Quelques résultats
+
+Nous avons testé nos algorithmes sur quelques exemples représentatifs,
+voici les résultats trouvés pour les puzzles de taille $3\times3$.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{V{3}cV{3}cV{3}c|c|cV{3}c|c|cV{3}}
+\hlineB{3}
+\multirow{2}{*}{\'Etat} & \multirow{2}{*}{Difficulté} & \multicolumn{3}{cV{3}}{Algorithme} & \multicolumn{3}{cV{3}}{Heuristique} \\\cline{3-8}
+                        &                             & Greedy & ID-DFS & A*               & Manh. & Ham. & M3H \\
+\hlineB{3}
+\state{1&2&3\\4&5& \\7&8&6} & triviale  & \makecell{$t=13$ms\\$N=1$}    & \makecell{$t=3$ms\\$N=1$}         & \makecell{$t=9$ms\\$N=1$}       &  1 & 1 &  4 \\\hline
+\state{ &1&3\\4&2&5\\7&8&6} & facile    & \makecell{$t=18$ms\\$N=4$}    & \makecell{$t=6$ms\\$N=4$}         & \makecell{$t=19$ms\\$N=4$}      &  4 & 4 & 16 \\\hline
+\state{8&1&3\\4& &2\\7&6&5} & moyenme   & \makecell{$t=96$ms\\$N=34$}   & \makecell{$t=237$ms\\$N=14$}      & \makecell{$t=210$ms\\$N=14$}    & 10 & 5 & 25 \\\hline
+\state{4&3&8\\2& &1\\6&5&7} & difficile & \makecell{$t=418$ms\\$N=176$} & \makecell{$t=6~916$ms\\$N=20$}    & \makecell{$t=587$ms\\$N=20$}    & 16 & 8 & 40 \\\hline
+\state{6&4&7\\8&5& \\3&2&1} & maximale  & \makecell{$t=108$ms\\$N=45$}  & \makecell{$t=9~233$ms\\$N^*=41$}  & \makecell{$t=27~005$ms\\$N=31$} & 21 & 7 & 42 \\\hline
+\state{8&6&7\\2&5&4\\3& &1} & maximale  & \makecell{$t=644$ms\\$N=243$} & \makecell{$t=23~124$ms\\$N^*=41$} & \makecell{$t=21~933$ms\\$N=31$} & 21 & 7 & 42 \\\hline
+\hlineB{3}
+\end{tabular}
+\caption{Comparaison des algorithmes sur des taquin de taille $3\times3$}
+\end{table}
+<figure>
+  <img src="img/results.png">
+  <figcaption><b>Table 2</b> -- Comparaison des algorithmes sur des taquin de taille 3×3</figcaption>
+</figure>
+
+Les états classés de difficulté *maximale* sont les configurations
+avec les chemins les plus longue pour un puzzle 3×3. [@reinefeld]
+
+Les résultats du DFS sont absents du tableau car pour tous états
+non triviaux l'algorithme ne trouve pas un chemin avant qu'on
+perde notre patience.
+
+Les solutions de Greedy sont calculé avec l'heuristique local `m3h`.
+Les solutions de ID-DFS et A\* sont trouvé avec l'heuristique de Manhattan à part
+ceux marquées avec un asterisk; elles sont trouvées avec `m3h` qui n'est pas admissible,
+car l'algorithme met beaucoup de temps pour trouver le chemin avec Manhattan
+et nous n'avons jamais réussi à obtenir un résultat.
+Néanmoins, si on part directement de l'itération de profondeur 31, les chemins
+optimaux sont trouvé en $237~514 \text{ms}\approx 4\text{min}$ et
+$271~363\text{ms}\approx 4.5\text{min}$ respectivement.

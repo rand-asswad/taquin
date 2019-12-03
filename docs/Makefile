@@ -1,3 +1,6 @@
+doc: pdf html
+	@echo "rendering document html and pdf..."
+
 demo: ../8puzzle.pl
 	@echo "consulting prolog files..."
 	python3 demo/preprocess.py $<
